@@ -41,3 +41,9 @@
 - Backend is running and verified on port 9000 (`/size`, `/column`, `/wilibox-column`).
 - Added `client/README.md` with end-to-end Part 1 plan, Retrofit/Moshi setup, data models, repository/ViewModel scaffolds, nearest-neighbor helper, UI outline, and demo/run instructions.
 - Next: scaffold the Android project using the provided snippets; point Retrofit to `http://10.0.2.2:9000/` in emulator, build grid UI, and hook the nearest-neighbor call to the MAC/RSSI input form. Test with backend running.
+## Update 2025-12-01 (later)
+- Android client scaffolded: added Retrofit/Moshi, coroutines, lifecycle, RecyclerView deps and viewBinding.
+- Implemented API models/service/provider, repository to load grid from `/size` + `/column`, nearest-neighbor helper, and ViewModel with LiveData state + factory.
+- Built minimal UI: RecyclerView grid (colored cells, highlight located), inputs for wiliboxas1-3 RSSI, locate button, loading/error handling.
+- Base URL set to `http://10.0.2.2:9000/` for emulator.
+- Next: run app with backend on port 9000, verify grid shows and locating works; adjust UI polish if desired.
