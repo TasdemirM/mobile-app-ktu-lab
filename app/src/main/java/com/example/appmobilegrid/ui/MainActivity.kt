@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
             if (target.isEmpty()) {
                 Toast.makeText(this, "Enter at least one RSSI value", Toast.LENGTH_SHORT).show()
             } else {
+                // Ask ViewModel to run nearest-neighbor and record history.
                 viewModel.locate(target)
             }
         }
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildTargetMap(): Map<String, Int> {
-        // Gather manual RSSI inputs into sensor->value map.
+        // Gather manual RSSI inputs into sensor->value map; empty fields are ignored.
         val map = mutableMapOf<String, Int>()
         binding.sensor1Input.text?.toString()?.takeIf { it.isNotBlank() }?.toIntOrNull()
             ?.let { map["wiliboxas1"] = it }

@@ -70,3 +70,13 @@
 2) In Android Studio, Run on emulator.
 3) Confirm grid appears.
 4) Enter sample RSSI: wiliboxas1=20, wiliboxas2=15, wiliboxas3=10 › tap Locate › see highlighted cell.
+## Key files (extended)
+- Android
+  - Manifest: `app/src/main/AndroidManifest.xml` (permissions, cleartext, main activity)
+  - Build config: `app/build.gradle.kts` (deps: Retrofit/Moshi, coroutines, lifecycle, RecyclerView, Material, viewBinding)
+  - API layer: `api/Models.kt`, `api/MapServiceApi.kt` (HTTP endpoints), `api/Network.kt` (Retrofit client)
+  - Data/logic: `data/MapRepository.kt` (fetch map/build grid), `data/NearestNeighbor.kt` (1-NN over RSSI)
+  - UI/state: `ui/MainViewModel.kt` (state + load/locate), `ui/MainViewModelFactory.kt`, `ui/MainActivity.kt` (Grid/Add/History sections), `ui/GridAdapter.kt` (grid cells), `ui/ManualEntriesAdapter.kt` (history list)
+  - Layouts: `res/layout/activity_main.xml` (toolbar, cards, grid, form, history, bottom nav), `item_cell.xml`, `item_manual_entry.xml`
+- Part1 (Python)
+  - `config.py` (DB creds), `db.py` (fetch matavimai/stiprumai/vartotojai), `grid.py` (grid assembly), `nn.py` (nearest neighbor), `viz.py` (matplotlib), `main.py` (Typer CLI: fetch-grid, locate, show-grid), `requirements.txt`, `README.md`/`STUDY.md` (setup/notes)

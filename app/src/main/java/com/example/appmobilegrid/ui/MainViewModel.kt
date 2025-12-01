@@ -15,7 +15,7 @@ class MainViewModel(private val repo: MapRepository) : ViewModel() {
     data class UiState(
         val loading: Boolean = false,
         val error: String? = null,
-        val size: MapSize? = null,
+        val size: MapSize? = null, // map bounds from backend
         val grid: Map<Pair<Int, Int>, Map<String, Int>> = emptyMap(), // map cell -> sensor RSSI
         val located: Pair<Int, Int>? = null, // latest located cell
         val manualEntries: List<ManualEntry> = emptyList() // history of manual locate attempts
