@@ -34,6 +34,7 @@ object NearestNeighbor {
             sum += diff * diff
             count++
         }
+        // If no overlapping sensors, treat as infinitely far.
         return if (count == 0) Double.MAX_VALUE else kotlin.math.sqrt(sum)
     }
 }

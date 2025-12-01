@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Grid uses a staggered column count based on map width (set in observer).
+        // Grid uses a dynamic column count based on map width (set in observer).
         binding.gridRecycler.adapter = adapter
         binding.manualRecycler.layoutManager = LinearLayoutManager(this)
         binding.manualRecycler.adapter = manualAdapter
@@ -45,10 +45,12 @@ class MainActivity : AppCompatActivity() {
             binding.progress.visibility = if (state.loading) View.VISIBLE else View.GONE
             binding.errorText.visibility = if (state.error != null) View.VISIBLE else View.GONE
             binding.errorText.text = state.error ?: ""
+            // Show current located position, if available.
             binding.locatedText.text = when (val loc = state.located) {
                 null -> "Location: waiting..."
                 else -> "Location: (${loc.first}, ${loc.second})"
             }
+            // Update history list with manual locate attempts.
             manualAdapter.update(state.manualEntries)
 
             val size = state.size
@@ -87,6 +89,7 @@ class MainActivity : AppCompatActivity() {
     private enum class Section { GRID, ADD, LIST }
 
     private fun showSection(section: Section) {
+        // Toggle visibility of main areas based on selected tab.
         binding.gridRecycler.visibility = if (section == Section.GRID) View.VISIBLE else View.GONE
         binding.statusCard.visibility = if (section == Section.GRID) View.VISIBLE else View.GONE
         binding.inputGroup.visibility = if (section == Section.ADD) View.VISIBLE else View.GONE

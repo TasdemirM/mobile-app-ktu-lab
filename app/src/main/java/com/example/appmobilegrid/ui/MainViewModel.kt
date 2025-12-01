@@ -16,9 +16,9 @@ class MainViewModel(private val repo: MapRepository) : ViewModel() {
         val loading: Boolean = false,
         val error: String? = null,
         val size: MapSize? = null,
-        val grid: Map<Pair<Int, Int>, Map<String, Int>> = emptyMap(),
-        val located: Pair<Int, Int>? = null,
-        val manualEntries: List<ManualEntry> = emptyList()
+        val grid: Map<Pair<Int, Int>, Map<String, Int>> = emptyMap(), // map cell -> sensor RSSI
+        val located: Pair<Int, Int>? = null, // latest located cell
+        val manualEntries: List<ManualEntry> = emptyList() // history of manual locate attempts
     )
 
     data class ManualEntry(
