@@ -11,6 +11,7 @@ class ManualEntriesAdapter(
     private var items: List<MainViewModel.ManualEntry>
 ) : RecyclerView.Adapter<ManualEntriesAdapter.EntryViewHolder>() {
 
+    // Replace entire list; simple UI so no diff util needed.
     fun update(newItems: List<MainViewModel.ManualEntry>) {
         items = newItems
         notifyDataSetChanged()

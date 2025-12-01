@@ -32,6 +32,7 @@ class MainViewModel(private val repo: MapRepository) : ViewModel() {
     val state: LiveData<UiState> = _state
 
     fun load() {
+        // Fetch map size and grid cells from backend.
         _state.value = _state.value?.copy(loading = true, error = null)
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -55,6 +56,7 @@ class MainViewModel(private val repo: MapRepository) : ViewModel() {
     }
 
     fun locate(targetRssi: Map<String, Int>) {
+        // Run nearest neighbor against current grid and record the attempt.
         val grid = _state.value?.grid ?: return
         val (best, dist) = NearestNeighbor.findClosestWithDistance(grid, targetRssi)
         val nextId = (_state.value?.manualEntries?.maxOfOrNull { it.id } ?: 0) + 1

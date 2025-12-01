@@ -21,10 +21,12 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Grid uses a staggered column count based on map width (set in observer).
         binding.gridRecycler.adapter = adapter
         binding.manualRecycler.layoutManager = LinearLayoutManager(this)
         binding.manualRecycler.adapter = manualAdapter
 
+        // Bottom nav buttons swap visible section.
         binding.locateButton.setOnClickListener {
             val target = buildTargetMap()
             if (target.isEmpty()) {
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         binding.navList.setOnClickListener { showSection(Section.LIST) }
 
         viewModel.state.observe(this) { state ->
+            // Loading / error state
             binding.progress.visibility = if (state.loading) View.VISIBLE else View.GONE
             binding.errorText.visibility = if (state.error != null) View.VISIBLE else View.GONE
             binding.errorText.text = state.error ?: ""
@@ -53,6 +56,7 @@ class MainActivity : AppCompatActivity() {
                 val width = size.maxX - size.minX + 1
                 binding.gridRecycler.layoutManager = GridLayoutManager(this, width.coerceAtLeast(1))
 
+                // Build cell list for adapter; hasData marks measured cells.
                 val cells = mutableListOf<GridAdapter.Cell>()
                 for (y in size.minY..size.maxY) {
                     for (x in size.minX..size.maxX) {
@@ -69,6 +73,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun buildTargetMap(): Map<String, Int> {
+        // Gather manual RSSI inputs into sensor->value map.
         val map = mutableMapOf<String, Int>()
         binding.sensor1Input.text?.toString()?.takeIf { it.isNotBlank() }?.toIntOrNull()
             ?.let { map["wiliboxas1"] = it }

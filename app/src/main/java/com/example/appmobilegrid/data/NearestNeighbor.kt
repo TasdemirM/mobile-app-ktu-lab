@@ -12,6 +12,7 @@ object NearestNeighbor {
         grid: Map<Pair<Int, Int>, Map<String, Int>>,
         target: Map<String, Int>
     ): Pair<Pair<Int, Int>?, Double> {
+        // Iterate all cells; compute distance over overlapping sensors.
         var best: Pair<Int, Int>? = null
         var bestDist = Double.MAX_VALUE
         for ((coord, sensors) in grid) {
