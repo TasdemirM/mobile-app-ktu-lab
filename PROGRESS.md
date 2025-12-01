@@ -47,3 +47,7 @@
 - Built minimal UI: RecyclerView grid (colored cells, highlight located), inputs for wiliboxas1-3 RSSI, locate button, loading/error handling.
 - Base URL set to `http://10.0.2.2:9000/` for emulator.
 - Next: run app with backend on port 9000, verify grid shows and locating works; adjust UI polish if desired.
+## Update 2025-12-01 (later)
+- Fixed runtime issues on emulator: enabled cleartext traffic for local backend and added INTERNET permission.
+- App now loads grid from `http://10.0.2.2:9000/` on emulator with backend running; locate flow works after entering wiliboxas1-3 RSSI.
+- Remaining: optional UI polish/testing; otherwise Part 1 client is functional for demo.
