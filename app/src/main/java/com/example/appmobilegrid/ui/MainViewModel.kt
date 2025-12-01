@@ -17,7 +17,15 @@ class MainViewModel(private val repo: MapRepository) : ViewModel() {
         val error: String? = null,
         val size: MapSize? = null,
         val grid: Map<Pair<Int, Int>, Map<String, Int>> = emptyMap(),
-        val located: Pair<Int, Int>? = null
+        val located: Pair<Int, Int>? = null,
+        val manualEntries: List<ManualEntry> = emptyList()
+    )
+
+    data class ManualEntry(
+        val id: Int,
+        val inputs: Map<String, Int>,
+        val located: Pair<Int, Int>?,
+        val distance: Double
     )
 
     private val _state = MutableLiveData(UiState())
@@ -48,7 +56,19 @@ class MainViewModel(private val repo: MapRepository) : ViewModel() {
 
     fun locate(targetRssi: Map<String, Int>) {
         val grid = _state.value?.grid ?: return
-        val best = NearestNeighbor.findClosest(grid, targetRssi)
-        _state.postValue(_state.value?.copy(located = best))
+        val (best, dist) = NearestNeighbor.findClosestWithDistance(grid, targetRssi)
+        val nextId = (_state.value?.manualEntries?.maxOfOrNull { it.id } ?: 0) + 1
+        val updatedEntries = _state.value?.manualEntries.orEmpty() + ManualEntry(
+            id = nextId,
+            inputs = targetRssi,
+            located = best,
+            distance = dist
+        )
+        _state.postValue(
+            _state.value?.copy(
+                located = best,
+                manualEntries = updatedEntries
+            )
+        )
     }
 }

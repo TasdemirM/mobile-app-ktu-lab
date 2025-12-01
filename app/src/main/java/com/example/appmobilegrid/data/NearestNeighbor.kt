@@ -5,6 +5,13 @@ object NearestNeighbor {
         grid: Map<Pair<Int, Int>, Map<String, Int>>,
         target: Map<String, Int>
     ): Pair<Int, Int>? {
+        return findClosestWithDistance(grid, target).first
+    }
+
+    fun findClosestWithDistance(
+        grid: Map<Pair<Int, Int>, Map<String, Int>>,
+        target: Map<String, Int>
+    ): Pair<Pair<Int, Int>?, Double> {
         var best: Pair<Int, Int>? = null
         var bestDist = Double.MAX_VALUE
         for ((coord, sensors) in grid) {
@@ -14,7 +21,7 @@ object NearestNeighbor {
                 best = coord
             }
         }
-        return best
+        return best to bestDist
     }
 
     private fun distance(cell: Map<String, Int>, target: Map<String, Int>): Double {

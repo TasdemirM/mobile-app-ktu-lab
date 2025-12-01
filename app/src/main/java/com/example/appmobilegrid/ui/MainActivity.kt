@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.appmobilegrid.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -13,6 +14,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels { MainViewModelFactory() }
     private var adapter = GridAdapter(emptyList(), null)
+    private var manualAdapter = ManualEntriesAdapter(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.gridRecycler.adapter = adapter
+        binding.manualRecycler.layoutManager = LinearLayoutManager(this)
+        binding.manualRecycler.adapter = manualAdapter
 
         binding.locateButton.setOnClickListener {
             val target = buildTargetMap()
@@ -30,10 +34,19 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        binding.navGrid.setOnClickListener { showSection(Section.GRID) }
+        binding.navAdd.setOnClickListener { showSection(Section.ADD) }
+        binding.navList.setOnClickListener { showSection(Section.LIST) }
+
         viewModel.state.observe(this) { state ->
             binding.progress.visibility = if (state.loading) View.VISIBLE else View.GONE
             binding.errorText.visibility = if (state.error != null) View.VISIBLE else View.GONE
             binding.errorText.text = state.error ?: ""
+            binding.locatedText.text = when (val loc = state.located) {
+                null -> "Location: waiting..."
+                else -> "Location: (${loc.first}, ${loc.second})"
+            }
+            manualAdapter.update(state.manualEntries)
 
             val size = state.size
             if (size != null) {
@@ -52,6 +65,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewModel.load()
+        showSection(Section.GRID)
     }
 
     private fun buildTargetMap(): Map<String, Int> {
@@ -63,5 +77,15 @@ class MainActivity : AppCompatActivity() {
         binding.sensor3Input.text?.toString()?.takeIf { it.isNotBlank() }?.toIntOrNull()
             ?.let { map["wiliboxas3"] = it }
         return map
+    }
+
+    private enum class Section { GRID, ADD, LIST }
+
+    private fun showSection(section: Section) {
+        binding.gridRecycler.visibility = if (section == Section.GRID) View.VISIBLE else View.GONE
+        binding.statusCard.visibility = if (section == Section.GRID) View.VISIBLE else View.GONE
+        binding.inputGroup.visibility = if (section == Section.ADD) View.VISIBLE else View.GONE
+        binding.manualRecycler.visibility = if (section == Section.LIST) View.VISIBLE else View.GONE
+        binding.listTitle.visibility = if (section == Section.LIST) View.VISIBLE else View.GONE
     }
 }
